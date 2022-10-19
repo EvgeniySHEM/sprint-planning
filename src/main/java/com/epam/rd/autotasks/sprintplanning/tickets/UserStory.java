@@ -9,18 +9,24 @@ public class UserStory extends Ticket {
         dependent = dependentOn;
     }
 
-//    @Override
-//    public void complete() {
-//        if( dependent == null ) {
-//            status = true;
-//        }
-//        if ( dependent.length > 0 && dependent[0].isCompleted() == true ) {
-//            this.status = true;
-//        }
-//        else {
-//            this.status = false;
-//        }
-//    }
+    @Override
+    public void complete() {
+        if (getDependencies().length == 0) {
+            status = true;
+        }
+        else  {
+            for (int i = 0; i < getDependencies().length; i++) {
+                if (getDependencies()[i].isCompleted() == true)
+                    if (i != getDependencies().length-1)
+                    continue;
+                    else
+                        status = true;
+                else
+                    break;
+            }
+        }
+
+    }
 
     public UserStory[] getDependencies() {
         return dependent.clone();

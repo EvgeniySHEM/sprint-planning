@@ -5,7 +5,7 @@ public class Ticket {
     private int id;
     private String name;
     private int estimate;
-    private boolean status = false;
+    boolean status = false;
 
 
     public Ticket(int id, String name, int estimate) {
