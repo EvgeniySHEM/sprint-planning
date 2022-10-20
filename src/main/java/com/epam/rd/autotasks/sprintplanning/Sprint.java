@@ -27,24 +27,39 @@ public class Sprint {
         if ( userStory.getId() > ticketsLimit )
             return false;
 
-//        if ( userStory.getDependencies() != null ) {
-//            for ( int i = 0; i < userStory.getDependencies().length; i++ ) {
-//                if ( userStory.getDependencies()[i].isCompleted() == false ) {
-//                    for ( int j = 0; j < tickets.length; j++) {
-//                        if ( tickets == null )
-//                            return false;
-//
-//                        if ( tickets[j] == userStory.getDependencies()[i]) {
-//                            tickets[index] = userStory;
-//                            index++;
-//                            return true;
-//                        }
-//                        else
-//                            continue;
-//                    }
-//                }
-//            }
-//        }
+
+        if ( userStory.getDependencies().length != 0 ) {
+            INNER1:
+            for (int i = 0; i < userStory.getDependencies().length; i++) {
+                if ( userStory.getDependencies()[i].isCompleted() == false) {
+                    INNER2:
+                    for (int j = 0; j < tickets.length; j++) {
+                        if (tickets[j] == null) {
+                            return false;
+                        } else if (tickets[j] == userStory.getDependencies()[i]) {
+                            if ( i != userStory.getDependencies().length - 1) {
+                                continue INNER1;
+                            }
+                            else {
+                                tickets[index] = userStory;
+                                index++;
+                                return true;
+                            }
+                        } else if (j != tickets.length -1) {
+                            continue INNER2;
+
+                        } else {
+                            return false;
+                        }
+                    }
+
+                }
+                else {
+                    return false;
+                }
+            }
+
+        }
 
         tickets[index] = userStory;
         index++;
@@ -59,17 +74,21 @@ public class Sprint {
         if ( getTotalEstimate() + bugReport.getEstimate() > capacity)
             return false;
 
+        if ( bugReport.getId()-1 > ticketsLimit )
+            return false;
+
         tickets[index] = bugReport;
         index++;
         return true;
     }
+
 
     public Ticket[] getTickets() {
         int counter = 0;
 
         for (int i = 0; i < tickets.length; i++) {
             if (tickets[i] == null)
-                    continue;
+                continue;
             else
                 counter++;
         }
@@ -83,27 +102,20 @@ public class Sprint {
                 result[i] = tickets[i];
         }
 
+        return result;
+    }
 
-
-//                result[i] = tickets[i];
-//                else if (tickets[i - 1].getId() > tickets[i].getId()) {
-//                        a = tickets[i - 1];
-//                        tickets[i - 1] = tickets[i];
-//                        tickets[i] = a;
-//                }
-
-            return result;
-        }
 
     public int getTotalEstimate() {
         int sumEstimate = 0;
 
-        for (int i=0; i<tickets.length; i++)
-            if ( tickets[i] == null )
+        for (int i=0; i<tickets.length; i++) {
+            if (tickets[i] == null)
                 return sumEstimate;
             else
                 sumEstimate += tickets[i].getEstimate();
+        }
 
-            return sumEstimate;
+        return sumEstimate;
     }
 }
